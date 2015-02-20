@@ -1,34 +1,49 @@
 #include "lex.h"
 
-tok_struct lex_str(char* str)
+token_array lex(char* str)
 {
-	tok_struct tokens;
+	token_array tokens;
 	tokens.tok_array = NULL;
-	tokens.tok_len = 0;
+	tokens.len = 0;
 	unsigned int index = 0;
 
 	while(str[index] != '\0')
 	{
-		if(str[index] == '(')
+		if(str[index] == '"')
 		{
-			inc_tok_struct(&tokens);
-
+			tokens = lex_str(tokens, &str[index]);
+		}
+		else if(str[index] == '(')
+		{
+			tokens = add_to_tok_array(tokens, &str[index], 1, OPAREN);
+		}
+		else if(str[index] == ')')
+		{
+			tokens = add_to_tok_array(tokens, &str[index], 1, CPAREN);
 		}
 	}
 
 	return tokens;
 }
 
-void inc_tok_struct(tok_struct* tokens)
+token_array inc_tok_array(token_array tokens)
 {
-	tokens->tok_len++;
-	tokens->tok_array = realloc(tokens->tok_array, sizeof(char*) * tokens->tok_len);
+	tokens.len++;
+	tokens.tok_array = realloc(tokens.tok_array, sizeof(token) * tokens.len);
+	tokens.tok_array[tokens.len - 1].tok_str = NULL;
+	return tokens;
 }
 
-void add_to_tok_struct(tok_struct* tokens, char* new_str, unsigned int new_str_len)
+token_array add_to_tok_array(token_array tokens, char* new_str, unsigned int new_str_len, type tok_type)
 {
-	inc_tok_struct(tokens);
-	tokens->tok_array[tokens->tok_len - 1] = malloc(sizeof(char) * (new_str_len + 1));
-	memcpy(tokens->tok_array[tokens->tok_len - 1], new_str, new_str_len);
-	tokens->tok_array[tokens->tok_len - 1][new_str_len + 1] = '\0';
+	tokens = inc_tok_array(tokens);
+	tokens.tok_array[tokens.len - 1].tok_str = malloc(sizeof(char) * (new_str_len + 1));
+	memcpy(tokens.tok_array[tokens.len - 1].tok_str, new_str, new_str_len);
+	tokens.tok_array[tokens.len - 1].tok_str[new_str_len] = '\0';
+	return tokens;
+}
+
+token_array lex_str(token_array tokens, char* unlexed_str)
+{
+	return tokens;
 }
