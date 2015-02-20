@@ -40,6 +40,7 @@ token_array add_to_tok_array(token_array tokens, char* new_str, unsigned int new
 	tokens.tok_array[tokens.len - 1].tok_str = malloc(sizeof(char) * (new_str_len + 1));
 	memcpy(tokens.tok_array[tokens.len - 1].tok_str, new_str, new_str_len);
 	tokens.tok_array[tokens.len - 1].tok_str[new_str_len] = '\0';
+	tokens.tok_array[tokens.len - 1].tok_type = tok_type;
 	return tokens;
 }
 
