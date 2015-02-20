@@ -1,7 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -std=c99
 COMP = $(CC) $(CFLAGS)
-LEX = src/lex/
 
 lisp: hackit.o lex.o
 	$(COMP) hackit.o lex.o -o hackit
@@ -9,8 +8,8 @@ lisp: hackit.o lex.o
 hackit.o: src/hackit.c
 	$(COMP) -c src/hackit.c
 
-lex.o: $(LEX)lex.c $(LEX)lex.h
-	$(COMP) -c $(LEX)lex.c
+lex.o: src/lex/lex.c src/lex/lex.h
+	$(COMP) -c src/lex/lex.c
 
 clean:
 	rm -v *.o
