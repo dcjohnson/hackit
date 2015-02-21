@@ -16,6 +16,14 @@ enum type
 
 typedef enum type type;
 
+enum err
+{
+	DEFAULT,
+	AMBIGUOUS_STRING
+};
+
+typedef enum err err;
+
 struct token
 {
 	char* tok_str;
@@ -27,14 +35,16 @@ typedef struct token token;
 struct token_array
 {
 	token* tok_array;
-	unsigned int len;
+	int len;
 };
 
 typedef struct token_array token_array;
 
-token_array lex(char* str);
-token_array inc_tok_array(token_array tokens);
-token_array add_to_tok_array(token_array tokens, char* new_str, unsigned int new_str_len, type tok_type);
-token_array lex_str(token_array tokens, char* unlexed_str);
+char* lex(token_array* tokens, char* str);
+void inc_tok_array(token_array* tokens);
+void add_to_tok_array(token_array* tokens, char* new_str, int new_str_len, type tok_type);
+int lex_str(token_array* tokens, char* unlexed_str);
+void free_tok_array_ptr(token_array** tokens);
+char* ret_err_str(err err_type);
 
 #endif

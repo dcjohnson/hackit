@@ -1,8 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -std=c99
+CFLAGS = -Wall -O0 -g -std=c99 -fdiagnostics-color=auto
 COMP = $(CC) $(CFLAGS)
 
-lisp: hackit.o lex.o
+hackit: hackit.o lex.o
 	$(COMP) hackit.o lex.o -o hackit
 
 hackit.o: src/hackit.c
