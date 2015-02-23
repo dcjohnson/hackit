@@ -132,7 +132,6 @@ void free_tok_array(token_array* toks)
 	free(toks->tok_array);
 	toks->tok_array = NULL;
 	toks->len = 0;
-	
 }
 
 char* ret_err_str(err err_type)
