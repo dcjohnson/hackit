@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 {
 	char input[60];
 	token_array toks;
-	scanf("%s", input);
+	fgets(input, 60, stdin);
 	char* err = lex(&toks, input);
 	if(err != NULL)
 	{

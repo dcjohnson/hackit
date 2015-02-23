@@ -3,11 +3,10 @@
 char* lex(token_array* tokens, char* str)
 {
 	char* ok_err_str = NULL;
-
 	tokens->tok_array = NULL;
 	tokens->len = 0;
-
 	int index = 0;
+
 	while(str[index] != '\0')
 	{
 		if(str[index] == '"')
@@ -21,6 +20,17 @@ char* lex(token_array* tokens, char* str)
 			add_to_tok_array(tokens, &str[index], str_len, STRING);
 			index += (str_len - 1);
 		}
+		else if(((int)str[index] >= (int)'0' && (int)str[index] <= (int)'9') || str[index] == '.')
+		{
+			int val_len = lex_value(tokens, &str[index]);
+			if(val_len == -1)
+			{
+				ok_err_str = ret_err_str(AMBIGUOUS_VALUE);
+				break;
+			}
+			add_to_tok_array(tokens, &str[index], val_len, VALUE);
+			index += (val_len - 1);
+		}
 		else if(str[index] == '(')
 		{
 			add_to_tok_array(tokens, &str[index], 1, OPAREN);
@@ -30,9 +40,7 @@ char* lex(token_array* tokens, char* str)
 			add_to_tok_array(tokens, &str[index], 1, CPAREN);
 		}
 		index++;
-
 	}
-
 	return ok_err_str;
 }
 
@@ -73,12 +81,56 @@ int lex_str(token_array* tokens, char* unlexed_str)
 	return -1;
 }
 
+int lex_value(token_array* tokens, char* unlexed_value)
+{
+	int val_len = 1;
+	char cur_digit = unlexed_value[val_len];
+	int decimal = unlexed_value[0] == '.' ? 1 : 0;
+	for(;;)
+	{
+		if(cur_digit == '.')
+		{
+			if(decimal == 1)
+			{
+				if(val_len == 1)
+				{
+					return -1;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				decimal = 1;
+			}
+		}
+		else if(!((int)cur_digit >= (int)'0' && (int)cur_digit <= (int)'9'))
+		{
+			if(val_len == 1 && decimal == 1)
+			{
+				return -1;
+			}
+			else
+			{
+				break;
+			}
+		}
+		val_len++;
+		cur_digit = unlexed_value[val_len];
+	}
+	return val_len;
+}
+
 char* ret_err_str(err err_type)
 {
 	switch (err_type)
 	{
 		case AMBIGUOUS_STRING:
 			return "Ambiguous string declaration";
+		case AMBIGUOUS_VALUE:
+			return "Ambiguous value declaration";
 		default:
 			return "Error";
 	}

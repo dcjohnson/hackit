@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 enum type
 {
@@ -18,8 +19,9 @@ typedef enum type type;
 
 enum err
 {
-	DEFAULT,
-	AMBIGUOUS_STRING
+	DEFAULT = 0,
+	AMBIGUOUS_STRING = 1,
+	AMBIGUOUS_VALUE = 2
 };
 
 typedef enum err err;
@@ -46,5 +48,6 @@ void add_to_tok_array(token_array* tokens, char* new_str, int new_str_len, type 
 int lex_str(token_array* tokens, char* unlexed_str);
 void free_tok_array_ptr(token_array** tokens);
 char* ret_err_str(err err_type);
+int lex_value(token_array* tokens, char* unlexed_value);
 
 #endif
