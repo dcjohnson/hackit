@@ -49,5 +49,6 @@ int lex_str(token_array* tokens, char* unlexed_str);
 void free_tok_array_ptr(token_array** tokens);
 char* ret_err_str(err err_type);
 int lex_value(token_array* tokens, char* unlexed_value);
+void free_tok_array(token_array* toks);
 
 #endif

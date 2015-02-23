@@ -123,6 +123,17 @@ int lex_value(token_array* tokens, char* unlexed_value)
 	return val_len;
 }
 
+void free_tok_array(token_array* toks)
+{
+	for(int index = 0; index < toks->len; index++)
+	{
+		free(toks->tok_array[index].tok_str);
+	}
+	free(toks->tok_array);
+	toks->tok_array = NULL;
+	toks->len = 0;
+}
+
 char* ret_err_str(err err_type)
 {
 	switch (err_type)
