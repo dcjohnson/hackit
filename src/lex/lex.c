@@ -39,6 +39,19 @@ char* lex(token_array* tokens, char* str)
 		{
 			add_to_tok_array(tokens, &str[index], 1, CPAREN);
 		}
+		else if(((int)str[index] >= (int)'a' && (int)str[index] <= (int)'z') ||
+				((int)str[index] >= (int)'A' && (int)str[index] <= (int)'Z') ||
+				str[index] == '_')
+		{
+			int val_len = lex_ident(tokens, &str[index]);
+			add_to_tok_array(tokens, &str[index], val_len, VALUE);
+			index += (val_len - 1);
+		}
+		else if(str[index] != ' ' && str[index] != '\n')
+		{
+			ok_err_str = ret_err_str(UNRECOGNIZED_CHARACTER);
+			break;
+		}
 		index++;
 	}
 	return ok_err_str;
@@ -123,6 +136,27 @@ int lex_value(token_array* tokens, char* unlexed_value)
 	return val_len;
 }
 
+int lex_ident(token_array* tokens, char* unlexed_ident)
+{
+	int val_len = 0;
+	char cur_char = unlexed_ident[val_len];
+	for(;;)
+	{
+		if(((int)cur_char >= (int)'a' && (int)cur_char <= (int)'z') ||
+		   ((int)cur_char >= (int)'A' && (int)cur_char <= (int)'Z') ||
+			cur_char == '_')
+		{
+			val_len++;
+			cur_char = unlexed_ident[val_len];
+		}
+		else
+		{
+			break;
+		}
+	}
+	return val_len;
+}
+
 void free_tok_array(token_array* toks)
 {
 	for(int index = 0; index < toks->len; index++)
@@ -142,6 +176,8 @@ char* ret_err_str(err err_type)
 			return "Ambiguous string declaration";
 		case AMBIGUOUS_VALUE:
 			return "Ambiguous value declaration";
+		case UNRECOGNIZED_CHARACTER:
+			return "Unrecognized character";
 		default:
 			return "Error";
 	}

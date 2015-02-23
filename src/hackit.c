@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 				printf("%s\n", toks.tok_array[index].tok_str);
 			}
 		}
-		free_tok_array(&toks);	
+		free_tok_array(&toks);
 	}
 	return 0;
 }
