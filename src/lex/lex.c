@@ -2,58 +2,78 @@
 
 char* lex(token_array* tokens, char* str)
 {
-	char* ok_err_str = NULL;
 	tokens->tok_array = NULL;
 	tokens->len = 0;
-	int index = 0;
+	char cur_char;
 
-	while(str[index] != '\0')
+	char* err_mesg = lex_token(tokens, str, &cur_char);
+
+	while(cur_char != '\0' && err_mesg == NULL)
 	{
-		if(str[index] == '"')
-		{
-			int str_len = lex_str(tokens, &str[index]);
-			if(str_len == -1)
-			{
-				ok_err_str = ret_err_str(AMBIGUOUS_STRING);
-				break;
-			}
-			add_to_tok_array(tokens, &str[index], str_len, STRING);
-			index += (str_len - 1);
-		}
-		else if(((int)str[index] >= (int)'0' && (int)str[index] <= (int)'9') || str[index] == '.')
-		{
-			int val_len = lex_value(tokens, &str[index]);
-			if(val_len == -1)
-			{
-				ok_err_str = ret_err_str(AMBIGUOUS_VALUE);
-				break;
-			}
-			add_to_tok_array(tokens, &str[index], val_len, VALUE);
-			index += (val_len - 1);
-		}
-		else if(str[index] == '(')
-		{
-			add_to_tok_array(tokens, &str[index], 1, OPAREN);
-		}
-		else if(str[index] == ')')
-		{
-			add_to_tok_array(tokens, &str[index], 1, CPAREN);
-		}
-		else if(((int)str[index] >= (int)'a' && (int)str[index] <= (int)'z') ||
-				((int)str[index] >= (int)'A' && (int)str[index] <= (int)'Z') ||
-				str[index] == '_')
-		{
-			int val_len = lex_ident(tokens, &str[index]);
-			add_to_tok_array(tokens, &str[index], val_len, VALUE);
-			index += (val_len - 1);
-		}
-		else if(str[index] != ' ' && str[index] != '\n')
-		{
-			ok_err_str = ret_err_str(UNRECOGNIZED_CHARACTER);
-			break;
-		}
-		index++;
+		err_mesg = lex_token(tokens, NULL, &cur_char);
 	}
+	return err_mesg;
+}
+
+char* lex_token(token_array* tokens, char* src, char* cur_char)
+{
+	static char* static_str = NULL;
+	static int index = 0;
+	if(src != NULL)
+	{
+		index = 0;
+		static_str = src;
+	}
+
+	char* ok_err_str = NULL;
+
+	if(static_str[index] == '"')
+	{
+		int str_len = lex_str(tokens, &static_str[index]);
+		if(str_len == -1)
+		{
+			ok_err_str = ret_err_str(AMBIGUOUS_STRING);
+		}
+		add_non_list(tokens, &static_str[index], str_len, STRING);
+		index += (str_len - 1);
+	}
+	else if(((int)static_str[index] >= (int)'0' && (int)static_str[index] <= (int)'9') || static_str[index] == '.')
+	{
+		int val_len = lex_value(tokens, &static_str[index]);
+		if(val_len == -1)
+		{
+			ok_err_str = ret_err_str(AMBIGUOUS_VALUE);
+		}
+		add_non_list(tokens, &static_str[index], val_len, VALUE);
+		index += (val_len - 1);
+	}
+	else if(static_str[index] == '(')
+	{
+		add_non_list(tokens, &static_str[index], 1, OPAREN);
+	}
+	else if(static_str[index] == ')')
+	{
+		add_non_list(tokens, &static_str[index], 1, CPAREN);
+	}
+	else if(static_str[index] == '\'')
+	{
+		printf("%c\n", src[index]);
+	}
+	else if(((int)static_str[index] >= (int)'a' && (int)static_str[index] <= (int)'z') ||
+			((int)static_str[index] >= (int)'A' && (int)static_str[index] <= (int)'Z') ||
+			static_str[index] == '_')
+	{
+		int val_len = lex_ident(tokens, &static_str[index]);
+		add_non_list(tokens, &static_str[index], val_len, VALUE);
+		index += (val_len - 1);
+	}
+	else if(static_str[index] != ' ' && static_str[index] != '\n')
+	{
+		ok_err_str = ret_err_str(UNRECOGNIZED_CHARACTER);
+	}
+
+	index++;
+	*cur_char = static_str[index];
 	return ok_err_str;
 }
 
@@ -61,16 +81,26 @@ void inc_tok_array(token_array* tokens)
 {
 	tokens->len++;
 	tokens->tok_array = realloc(tokens->tok_array, sizeof(token) * tokens->len);
-	tokens->tok_array[tokens->len - 1].tok_str = NULL;
 }
 
-void add_to_tok_array(token_array* tokens, char* new_str, int new_str_len, type tok_type)
+int add_non_list(token_array* tokens, char* new_str, int new_str_len, type tok_type)
 {
+	if(tok_type == LIST)
+	{
+		return -1;
+	}
 	inc_tok_array(tokens);
-	tokens->tok_array[tokens->len - 1].tok_str = malloc(sizeof(char) * (new_str_len + 1));
-	memcpy(tokens->tok_array[tokens->len - 1].tok_str, new_str, new_str_len);
-	tokens->tok_array[tokens->len - 1].tok_str[new_str_len] = '\0';
+	tokens->tok_array[tokens->len - 1].tok_data.tok_str = malloc(sizeof(char) * (new_str_len + 1));
+	memcpy(tokens->tok_array[tokens->len - 1].tok_data.tok_str, new_str, new_str_len);
+	tokens->tok_array[tokens->len - 1].tok_data.tok_str[new_str_len] = '\0';
 	tokens->tok_array[tokens->len - 1].tok_type = tok_type;
+	return 1;
+}
+
+int lex_list(token_array* tokens, char* unlexed_list)
+{
+	int list_len = 1;
+	return list_len;
 }
 
 int lex_str(token_array* tokens, char* unlexed_str)
@@ -161,7 +191,10 @@ void free_tok_array(token_array* toks)
 {
 	for(int index = 0; index < toks->len; index++)
 	{
-		free(toks->tok_array[index].tok_str);
+		if(toks->tok_array[index].tok_type != LIST)
+		{
+			free(toks->tok_array[index].tok_data.tok_str);
+		}
 	}
 	free(toks->tok_array);
 	toks->tok_array = NULL;
@@ -176,6 +209,8 @@ char* ret_err_str(err err_type)
 			return "Ambiguous string declaration";
 		case AMBIGUOUS_VALUE:
 			return "Ambiguous value declaration";
+		case AMBIGUOUS_LIST:
+			return "Ambiguous list declaration";
 		case UNRECOGNIZED_CHARACTER:
 			return "Unrecognized character";
 		default:

@@ -5,6 +5,14 @@
 #include <string.h>
 #include <stdio.h>
 
+union data
+{
+	char* tok_str;
+	int list_tokens_len; // Number of tokens following this token that are in the list.
+};
+
+typedef union data data;
+
 enum type
 {
 	STRING = 0,
@@ -22,14 +30,15 @@ enum err
 	DEFAULT = 0,
 	AMBIGUOUS_STRING = 1,
 	AMBIGUOUS_VALUE = 2,
-	UNRECOGNIZED_CHARACTER = 3
+	AMBIGUOUS_LIST = 3,
+	UNRECOGNIZED_CHARACTER = 4
 };
 
 typedef enum err err;
 
 struct token
 {
-	char* tok_str;
+	data tok_data;
 	type tok_type;
 };
 
@@ -48,9 +57,11 @@ char* ret_err_str(err err_type);
 int lex_str(token_array* tokens, char* unlexed_str);
 int lex_value(token_array* tokens, char* unlexed_value);
 int lex_ident(token_array* tokens, char* unlexed_ident);
+int lex_list(token_array* tokens, char* unlexed_list);
 void inc_tok_array(token_array* tokens);
-void add_to_tok_array(token_array* tokens, char* new_str, int new_str_len, type tok_type);
+int add_non_list(token_array* tokens, char* new_str, int new_str_len, type tok_type);
 void free_tok_array(token_array* toks);
 void lex_identifier(token_array* tokens, char* unlexed_iden);
+char* lex_token(token_array* tokens, char* src, char* cur_char);
 
 #endif
