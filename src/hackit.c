@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 		{
 			for(int index = 0; index < toks.len; index++)
 			{
-				printf("%s\n", toks.tok_array[index].tok_str);
+				printf("%s\n", toks.tok_array[index].tok_data.tok_str);
 			}
 		}
 		free_tok_array(&toks);
