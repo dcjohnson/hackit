@@ -12,7 +12,6 @@ char* lex(token_array* tokens, char* str)
 	{
 		err_mesg = lex_token(tokens, NULL, &cur_char);
 	}
-	
 	return err_mesg;
 }
 
