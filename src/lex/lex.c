@@ -65,11 +65,14 @@ char* lex_token(token_array* tokens, char* src, char* cur_char)
 	}
 	else if(static_str[index] == ')')
 	{
-		add_non_list(tokens, &static_str[index], 1, CPAREN);
 		if(tok_len > 0)
 		{
 			tok_len--;
 			list_tokens_location = realloc(list_tokens_location, sizeof(int) * tok_len);
+		}
+		else
+		{
+			add_non_list(tokens, &static_str[index], 1, CPAREN);
 		}
 	}
 	else if(static_str[index] == '\'')
