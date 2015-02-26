@@ -1,4 +1,5 @@
 #include "lex/lex.h"
+#include "parse/parse.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
