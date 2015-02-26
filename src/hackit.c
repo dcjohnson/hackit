@@ -11,6 +11,10 @@ int main(int argc, char** argv)
 	{
 		printf("%s ", ">>");
 		fgets(input, 60, stdin);
+		if(feof(stdin))
+		{
+			break;
+		}
 		char* err = lex(&toks, input);
 		if(err != NULL)
 		{
