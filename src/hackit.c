@@ -6,12 +6,12 @@
 
 int main(int argc, char** argv)
 {
-	char input[60];
+	char input[1000];
 	token_array toks;
 	for(;;)
 	{
 		printf("%s ", ">>");
-		fgets(input, 60, stdin);
+		fgets(input, 1000, stdin);
 		if(feof(stdin))
 		{
 			break;

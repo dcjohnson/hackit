@@ -1,5 +1,5 @@
-CC = gcc
-CFLAGS = -Wall -O0 -g -std=c99 -fdiagnostics-color=auto
+CC = clang
+CFLAGS = -Wall -O0 -g -std=c99
 COMP = $(CC) $(CFLAGS)
 
 hackit: hackit.o lex.o parse.o
