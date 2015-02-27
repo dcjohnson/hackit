@@ -1,9 +1,10 @@
 CC = clang
 CFLAGS = -Wall -O0 -g -std=c99
 COMP = $(CC) $(CFLAGS)
+OBJFILES = hackit.o lex.o parse.o ast.o
 
-hackit: hackit.o lex.o parse.o
-	$(COMP) hackit.o lex.o parse.o -o hackit
+hackit: $(OBJFILES)
+	$(COMP) $(OBJFILES) -o hackit
 
 hackit.o: src/hackit.c
 	$(COMP) -c src/hackit.c
@@ -14,6 +15,8 @@ lex.o: src/lex/lex.c src/lex/lex.h
 parse.o: src/parse/parse.c src/parse/parse.h
 	$(COMP) -c src/parse/parse.c
 
+ast.o: src/ast/ast.c src/ast/ast.h
+	$(COMP) -c src/ast/ast.c
+
 clean:
-	rm -v *.o
-	rm hackit
+	rm -v $(OBJFILES) hackit
