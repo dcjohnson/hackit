@@ -1,6 +1,8 @@
 #ifndef AST_H
 #define AST_H
 
+#include <stdlib.h>
+
 enum data_type
 {
 	INT_DATA = 0,
@@ -18,6 +20,7 @@ union value
 	long double double_val;
 	char* string_val;
 	struct ast_data* list;
+	struct ast* func_ptr;
 };
 
 typedef union value value;
@@ -33,9 +36,12 @@ typedef struct ast_data ast_data;
 struct ast
 {
 	struct ast* child_nodes;
-	ast_data data;
+	ast_data* data; // Null if start state.
 };
 
 typedef struct ast ast;
+
+void init_ast(ast* ast_head);
+int insert_node(ast* ast_head, ast* new_ast_node);
 
 #endif
