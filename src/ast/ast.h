@@ -2,6 +2,7 @@
 #define AST_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 enum data_type
 {
@@ -37,11 +38,12 @@ struct ast
 {
 	struct ast* child_nodes;
 	ast_data* data; // Null if start state.
+	int child_count;
 };
 
 typedef struct ast ast;
 
 void init_ast(ast* ast_head);
-int insert_node(ast* ast_head, ast* new_ast_node);
+void insert_node(ast* parent, ast new_ast_node);
 
 #endif

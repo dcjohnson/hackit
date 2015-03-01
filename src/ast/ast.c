@@ -2,12 +2,14 @@
 
 void init_ast(ast* ast_head)
 {
-	ast_head = malloc(sizeof(ast));
 	ast_head->child_nodes = NULL;
 	ast_head->data = NULL;
+	ast_head->child_count = 0;
 }
 
-int insert_node(ast* ast_head, ast* new_ast_node)
+void insert_node(ast* parent, ast new_ast_node)
 {
-	return 1;
+	parent->child_count++;
+	parent->child_nodes = realloc(parent->child_nodes, sizeof(ast*) * parent->child_count);
+	parent->child_nodes[parent->child_count - 1] = new_ast_node;
 }
