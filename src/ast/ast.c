@@ -4,7 +4,6 @@ void init_ast(ast* ast_head)
 {
 	ast_head->child_nodes = NULL;
 	ast_head->parent_node = NULL;
-	ast_head->data = NULL;
 	ast_head->child_count = 0;
 }
 

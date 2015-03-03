@@ -37,8 +37,8 @@ typedef struct ast_data ast_data;
 struct ast
 {
 	struct ast* child_nodes;
-	struct ast* parent_node; 
-	ast_data* data; // Null if start state.
+	struct ast* parent_node; // Null if start state.
+	ast_data data;
 	int child_count;
 };
 
