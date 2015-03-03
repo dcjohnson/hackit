@@ -5,6 +5,7 @@
 #include "../lex/lex.h"
 
 char* parse(token_array* tokens, ast* tree);
-ast parse_token(token tok, ast* cur_node);
+void parse_token(token tok, ast* cur_node);
+int parse_string(token tok, ast* ast_node);
 
 #endif

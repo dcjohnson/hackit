@@ -7,18 +7,21 @@ char* parse(token_array* tokens, ast* tree)
 	ast cur_node = *tree;
 	for(int index = 0; index < tokens->len; index++)
 	{
-		cur_node = parse_token(tokens->tok_array[index], &cur_node);
+		parse_token(tokens->tok_array[index], &cur_node);
 	}
 
 	return ok_err_mesg;
 }
 
-ast parse_token(token tok, ast* cur_node)
+void parse_token(token tok, ast* cur_node)
 {
-	ast ret_node;
+	ast new_node;
 	switch(tok.tok_type)
 	{
 		case STRING:
+			init_ast(&new_node);
+			parse_string(tok, &new_node);
+			insert_node(cur_node, new_node);
 			break;
 		case VALUE:
 			break;
@@ -27,12 +30,24 @@ ast parse_token(token tok, ast* cur_node)
 		case IDENTIFIER:
 			break;
 		case OPAREN:
-			init_ast(&ret_node);
-			insert_node(cur_node, ret_node);
+			init_ast(&new_node);
+			insert_node(cur_node, new_node);
 			break;
 		case CPAREN:
-			ret_node = *cur_node->parent_node;
+			*cur_node = *cur_node->parent_node;
 			break;
 	}
-	return ret_node;
+}
+
+int parse_string(token tok, ast* ast_node)
+{
+	if(tok.tok_type != STRING)
+	{
+		return -1;
+	}
+
+	ast_node->data->val.string_val = malloc(sizeof(char) * strlen(tok.tok_data.tok_str));
+	strcpy(ast_node->data->val.string_val, tok.tok_data.tok_str);
+
+	return 1;
 }
