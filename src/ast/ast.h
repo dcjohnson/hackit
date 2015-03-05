@@ -45,6 +45,6 @@ struct ast
 typedef struct ast ast;
 
 void init_ast(ast* ast_head);
-void insert_node(ast* parent, ast new_ast_node);
+ast* insert_node(ast* parent, ast new_ast_node);
 
 #endif

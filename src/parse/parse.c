@@ -15,20 +15,28 @@ char* parse(token_array* tokens, ast* tree)
 
 void parse_token(token tok, ast** cur_node)
 {
+	static ast** list_nodes = NULL;
+	static int list_nodes_len = 0;
 	ast new_node;
+	ast* list_val = NULL;
 	switch(tok.tok_type)
 	{
 		case STRING:
 			init_ast(&new_node);
 			parse_string(tok, &new_node);
-			insert_node(*cur_node, new_node);
+			list_val = insert_node(*cur_node, new_node);
 			break;
 		case VALUE:
 			init_ast(&new_node);
 			parse_value(tok, &new_node);
-			insert_node(*cur_node, new_node);
+			list_val = insert_node(*cur_node, new_node);
 			break;
 		case LIST:
+			list_nodes_len++;
+			list_nodes = realloc(list_nodes, sizeof(ast*) * list_nodes_len);
+			init_ast(&new_node);
+			new_node.data.type = LIST_DATA;
+			list_nodes[list_nodes_len - 1] = insert_node(*cur_node, new_node);
 			break;
 		case IDENTIFIER:
 			break;
@@ -40,6 +48,11 @@ void parse_token(token tok, ast** cur_node)
 		case CPAREN:
 			*cur_node = (*cur_node)->parent_node;
 			break;
+	}
+
+	if(list_nodes_len == 0)
+	{
+		list_nodes[list_nodes_len - 1]->
 	}
 }
 
