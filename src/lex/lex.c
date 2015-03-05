@@ -40,8 +40,9 @@ char* lex_token(token_array* tokens, char* src, char* cur_char)
 		}
 		else
 		{
+			index++;
 			add_non_list(tokens, &static_str[index], str_len, STRING);
-			index += (str_len - 1);
+			index += str_len;
 			list_tok_to_inc = 1;
 		}
 	}
@@ -166,7 +167,7 @@ int lex_str(token_array* tokens, char* unlexed_str)
 		}
 		else if(cur_char == '"')
 		{
-			str_len++;
+			str_len--;
 			return str_len;
 		}
 		str_len++;

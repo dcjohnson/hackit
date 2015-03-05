@@ -52,3 +52,13 @@ int parse_string(token tok, ast* ast_node)
 
 	return 1;
 }
+
+int parse_value(token tok, ast* ast_node)
+{
+	if(tok.tok_type != VALUE)
+	{
+		return -1;
+	}
+
+	return 1;
+}

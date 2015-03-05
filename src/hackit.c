@@ -15,9 +15,11 @@ int main(int argc, char** argv)
 	init_ast(&new_ast);
 	parse(&toks, &new_ast);
 	printf("%s\n", new_ast.child_nodes[0].child_nodes[0].data.val.string_val);
+	printf("%i %i\n", new_ast.child_count, new_ast.child_nodes[0].child_count);
+	printf("%s\n", "Hello World\"");
 	// for(;;)
 	// {
-	// 	printf("%s", ">>");
+	// 	printf("%s ", ">>");
 	// 	fgets(input, 1000, stdin);
 	// 	if(feof(stdin))
 	// 	{
