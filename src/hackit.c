@@ -14,9 +14,14 @@ int main(int argc, char** argv)
 	ast new_ast;
 	init_ast(&new_ast);
 	parse(&toks, &new_ast);
-	printf("%s\n", new_ast.child_nodes[0].child_nodes[0].data.val.string_val);
+	// printf("%s\n", new_ast.child_nodes[0].child_nodes[0].data.val.string_val);
+	printf("%Lf\n", new_ast.child_nodes[0].child_nodes[0].data.val.float_val);
 	printf("%i %i\n", new_ast.child_count, new_ast.child_nodes[0].child_count);
-	printf("%s\n", "Hello World\"");
+
+
+
+
+
 	// for(;;)
 	// {
 	// 	printf("%s ", ">>");

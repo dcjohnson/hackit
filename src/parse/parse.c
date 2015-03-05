@@ -24,6 +24,9 @@ void parse_token(token tok, ast** cur_node)
 			insert_node(*cur_node, new_node);
 			break;
 		case VALUE:
+			init_ast(&new_node);
+			parse_value(tok, &new_node);
+			insert_node(*cur_node, new_node);
 			break;
 		case LIST:
 			break;
@@ -48,6 +51,7 @@ int parse_string(token tok, ast* ast_node)
 	}
 
 	ast_node->data.val.string_val = malloc(sizeof(char) * strlen(tok.tok_data.tok_str));
+	ast_node->data.type = STRING_DATA;
 	strcpy(ast_node->data.val.string_val, tok.tok_data.tok_str);
 
 	return 1;
@@ -58,6 +62,17 @@ int parse_value(token tok, ast* ast_node)
 	if(tok.tok_type != VALUE)
 	{
 		return -1;
+	}
+
+	if(strchr(tok.tok_data.tok_str, '.') == NULL)
+	{
+		ast_node->data.val.int_val = strtoll(tok.tok_data.tok_str, NULL, 10);
+		ast_node->data.type = INT_DATA;
+	}
+	else
+	{
+		ast_node->data.val.float_val = strtold(tok.tok_data.tok_str, NULL);
+		ast_node->data.type = FLOAT_DATA;
 	}
 
 	return 1;
