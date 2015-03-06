@@ -109,102 +109,101 @@ void add_list(token_array *tokens) {
 	tokens->tok_array[tokens->len - 1].tok_type = LIST;
 }
 
-int add_non_list(token_array *tokens, char *new_str, int new_str_len,
-	type tok_type) {
-		if (tok_type == LIST) {
-			return -1;
-		}
-		inc_tok_array(tokens);
-		tokens->tok_array[tokens->len - 1].tok_data.tok_str =
-		malloc(sizeof(char) * (new_str_len + 1));
-		memcpy(tokens->tok_array[tokens->len - 1].tok_data.tok_str, new_str, new_str_len);
-			tokens->tok_array[tokens->len - 1].tok_data.tok_str[new_str_len] = '\0';
-			tokens->tok_array[tokens->len - 1].tok_type = tok_type;
-			return 1;
-		}
+int add_non_list(token_array *tokens, char *new_str, int new_str_len, type tok_type) {
+	if (tok_type == LIST) {
+		return -1;
+	}
+	inc_tok_array(tokens);
+	tokens->tok_array[tokens->len - 1].tok_data.tok_str =
+	malloc(sizeof(char) * (new_str_len + 1));
+	memcpy(tokens->tok_array[tokens->len - 1].tok_data.tok_str, new_str, new_str_len);
+		tokens->tok_array[tokens->len - 1].tok_data.tok_str[new_str_len] = '\0';
+		tokens->tok_array[tokens->len - 1].tok_type = tok_type;
+		return 1;
+}
 
-		int lex_str(token_array *tokens, char *unlexed_str) {
-			int str_len = 1;
-			char cur_char = unlexed_str[str_len];
-			do {
-				if (cur_char == '\\' && unlexed_str[str_len + 1] != '\0') {
-					str_len++;
-				} else if (cur_char == '"') {
-					str_len--;
-					return str_len;
-				}
-				str_len++;
-				cur_char = unlexed_str[str_len];
-			} while (cur_char != '\0');
-			return -1;
+int lex_str(token_array *tokens, char *unlexed_str) {
+	int str_len = 1;
+	char cur_char = unlexed_str[str_len];
+	do {
+		if (cur_char == '\\' && unlexed_str[str_len + 1] != '\0') {
+			str_len++;
+		} else if (cur_char == '"') {
+			str_len--;
+			return str_len;
 		}
+		str_len++;
+		cur_char = unlexed_str[str_len];
+	} while (cur_char != '\0');
+	return -1;
+}
 
-		int lex_value(token_array *tokens, char *unlexed_value) {
-			int val_len = 1;
-			char cur_digit = unlexed_value[val_len];
-			int decimal = unlexed_value[0] == '.' ? 1 : 0;
-			for (;;) {
-				if (cur_digit == '.') {
-					if (decimal == 1) {
-						if (val_len == 1) {
-							return -1;
-						} else {
-							break;
-						}
-					} else {
-						decimal = 1;
-					}
-				} else if (!((int)cur_digit >= (int)'0' && (int)cur_digit <= (int)'9')) {
-					if (val_len == 1 && decimal == 1) {
-						return -1;
-					} else {
-						break;
-					}
-				}
-				val_len++;
-				cur_digit = unlexed_value[val_len];
-			}
-			return val_len;
-		}
-
-		int lex_ident(token_array *tokens, char *unlexed_ident) {
-			int val_len = 0;
-			char cur_char = unlexed_ident[val_len];
-			for (;;) {
-				if (((int)cur_char >= (int)'a' && (int)cur_char <= (int)'z') ||
-					((int)cur_char >= (int)'A' && (int)cur_char <= (int)'Z') ||
-				cur_char == '_') {
-					val_len++;
-					cur_char = unlexed_ident[val_len];
+int lex_value(token_array *tokens, char *unlexed_value) {
+	int val_len = 1;
+	char cur_digit = unlexed_value[val_len];
+	int decimal = unlexed_value[0] == '.' ? 1 : 0;
+	for (;;) {
+		if (cur_digit == '.') {
+			if (decimal == 1) {
+				if (val_len == 1) {
+					return -1;
 				} else {
 					break;
 				}
+			} else {
+				decimal = 1;
 			}
-			return val_len;
+		} else if (!((int)cur_digit >= (int)'0' && (int)cur_digit <= (int)'9')) {
+			if (val_len == 1 && decimal == 1) {
+				return -1;
+			} else {
+				break;
+			}
 		}
+		val_len++;
+		cur_digit = unlexed_value[val_len];
+	}
+	return val_len;
+}
 
-		void free_tok_array(token_array *toks) {
-			for (int index = 0; index < toks->len; index++) {
-				if (toks->tok_array[index].tok_type != LIST) {
-					free(toks->tok_array[index].tok_data.tok_str);
-				}
-			}
-			free(toks->tok_array);
-			toks->tok_array = NULL;
-			toks->len = 0;
+int lex_ident(token_array *tokens, char *unlexed_ident) {
+	int val_len = 0;
+	char cur_char = unlexed_ident[val_len];
+	for (;;) {
+		if (((int)cur_char >= (int)'a' && (int)cur_char <= (int)'z') ||
+			((int)cur_char >= (int)'A' && (int)cur_char <= (int)'Z') ||
+		cur_char == '_') {
+			val_len++;
+			cur_char = unlexed_ident[val_len];
+		} else {
+			break;
 		}
+	}
+	return val_len;
+}
 
-		char *ret_err_str(err err_type) {
-			switch (err_type) {
-				case AMBIGUOUS_STRING:
-					return "Ambiguous string declaration";
-				case AMBIGUOUS_VALUE:
-					return "Ambiguous value declaration";
-				case AMBIGUOUS_LIST:
-					return "Ambiguous list declaration";
-				case UNRECOGNIZED_CHARACTER:
-					return "Unrecognized character";
-				default:
-					return "Error";
-			}
+void free_tok_array(token_array *toks) {
+	for (int index = 0; index < toks->len; index++) {
+		if (toks->tok_array[index].tok_type != LIST) {
+			free(toks->tok_array[index].tok_data.tok_str);
 		}
+	}
+	free(toks->tok_array);
+	toks->tok_array = NULL;
+	toks->len = 0;
+}
+
+char *ret_err_str(err err_type) {
+	switch (err_type) {
+		case AMBIGUOUS_STRING:
+			return "Ambiguous string declaration";
+		case AMBIGUOUS_VALUE:
+			return "Ambiguous value declaration";
+		case AMBIGUOUS_LIST:
+			return "Ambiguous list declaration";
+		case UNRECOGNIZED_CHARACTER:
+			return "Unrecognized character";
+		default:
+			return "Error";
+	}
+}
