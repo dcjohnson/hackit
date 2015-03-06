@@ -12,10 +12,11 @@ char *parse(token_array *tokens, ast *tree) {
 }
 
 void parse_token(token tok, ast **cur_node) {
-	static data_list *list = NULL;
-	static int *list_lens = NULL;
+	static ast_data *list = NULL;
+	static int *list_len = NULL;
 	static int len = 0;
 	ast new_node;
+
 	switch (tok.tok_type) {
 		case STRING:
 			init_ast(&new_node);
@@ -26,9 +27,11 @@ void parse_token(token tok, ast **cur_node) {
 			parse_value(tok, &new_node);
 			break;
 		case LIST:
-			init_ast(&new_node);
-			new_node.data.type = LIST_DATA;
-			init_data_list(&new_node.data.val.list);
+			len++;
+			list = realloc(list, sizeof(ast_data) * len);
+			list_len = realloc(list_len, sizeof(int) * len);
+			init_data_list(&list[len - 1].val.list);
+			list_len[len - 1] = tok.tok_data.list_len;
 			break;
 		case IDENTIFIER:
 			break;
@@ -40,6 +43,34 @@ void parse_token(token tok, ast **cur_node) {
 		case CPAREN:
 			*cur_node = (*cur_node)->parent_node;
 			break;
+	}
+
+	if (tok.tok_type == STRING || tok.tok_type == VALUE) {
+		if (len > 0) {
+			list[len - 1].val.list.len++;
+			list[len - 1].val.list.list = realloc(list[len - 1].val.list.list, sizeof(ast_data) * list[len - 1].val.list.len);
+			list[len - 1].val.list.list[list[len - 1].val.list.len - 1] = new_node.data;
+		} else {
+			insert_node(*cur_node, new_node);
+		}
+	}
+
+	while(len > 1 && list[len - 1].val.list.len == list_len[len - 1]) {
+		list[len - 2].val.list.len++;
+		list[len - 2].val.list.list = realloc(list[len - 2].val.list.list, sizeof(ast_data) * list[len - 2].val.list.len);
+		list[len - 2].val.list.list[list[len - 2].val.list.len - 1] = list[len - 1];
+		len--;
+		list = realloc(list, sizeof(ast_data) * len);
+		list_len = realloc(list_len, sizeof(int) * len);
+	}
+
+	if (len == 1 && list[len - 1].val.list.len == list_len[len - 1]) {
+		init_ast(&new_node);
+		new_node.data = list[len - 1];
+		insert_node(*cur_node, new_node);
+		len--;
+		list = realloc(list, sizeof(ast_data) * len);
+		list_len = realloc(list_len, sizeof(int) * len);
 	}
 }
 
