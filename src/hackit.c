@@ -4,28 +4,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(int argc, char** argv)
-{
+int main(int argc, char **argv) {
 	char input[1000];
 	token_array toks;
 	printf("%s ", ">>");
 	fgets(input, 1000, stdin);
-	char* err = lex(&toks, input);
-	if(err != NULL)
-	{
+	char *err = lex(&toks, input);
+	if (err != NULL) {
 		puts(err);
 		return 0;
 	}
 	ast new_ast;
 	init_ast(&new_ast);
 	parse(&toks, &new_ast);
-	// printf("%lli\n", new_ast.child_nodes[0].child_nodes[0].data.val.int_val);
-	// printf("%Lf\n", new_ast.child_nodes[0].child_nodes[0].data.val.float_val);
-	// printf("%i %i\n", new_ast.child_count, new_ast.child_nodes[0].child_count);
-	// printf("%Lf\n", new_ast.child_nodes[0].child_nodes[1].child_nodes[0].data.val.float_val);
-	// puts(new_ast.child_nodes[0].child_nodes[1].child_nodes[1].data.val.string_val);
-
-
+	puts(new_ast.child_nodes[0].child_nodes[0].data.val.string_val);
+	// puts(new_ast.child_nodes[0].child_nodes[0].data.val.list.list[0].val.string_val);
 
 	// for(;;)
 	// {
@@ -46,11 +39,13 @@ int main(int argc, char** argv)
 	// 		{
 	// 			if(toks.tok_array[index].tok_type != LIST)
 	// 			{
-	// 				printf("%s\n", toks.tok_array[index].tok_data.tok_str);
+	// 				printf("%s\n",
+	// toks.tok_array[index].tok_data.tok_str);
 	// 			}
 	// 			else
 	// 			{
-	// 				printf("%i\n\n", toks.tok_array[index].tok_data.list_len);
+	// 				printf("%i\n\n",
+	// toks.tok_array[index].tok_data.list_len);
 	// 			}
 	// 		}
 	// 	}
