@@ -17,13 +17,6 @@ int main(int argc, char **argv) {
 	ast new_ast;
 	init_ast(&new_ast);
 	parse(&toks, &new_ast);
-	puts(new_ast.child_nodes[0].child_nodes[0].data.val.list.list[0].val.string_val);
-	puts(new_ast.child_nodes[0].child_nodes[0].data.val.list.list[1].val.string_val);
-	printf("%lli\n", new_ast.child_nodes[0].child_nodes[0].data.val.list.list[2].val.list.list[0].val.int_val);
-	printf("%Lf\n",  new_ast.child_nodes[0].child_nodes[0].data.val.list.list[2].val.list.list[1].val.list.list[0].val.float_val);
-	printf("%Lf\n",  new_ast.child_nodes[0].child_nodes[0].data.val.list.list[2].val.list.list[1].val.list.list[1].val.float_val);
-	printf("%Lf\n",  new_ast.child_nodes[0].child_nodes[0].data.val.list.list[3].val.list.list[0].val.float_val);
-	printf("%Lf\n",  new_ast.child_nodes[0].child_nodes[0].data.val.list.list[3].val.list.list[1].val.float_val);
 
 	// for(;;)
 	// {
