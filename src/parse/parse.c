@@ -34,6 +34,7 @@ void parse_token(token tok, ast **cur_node) {
 			list_len[len - 1] = tok.tok_data.list_len;
 			break;
 		case IDENTIFIER:
+			parse_ident(tok, *cur_node);
 			break;
 		case OPAREN:
 			init_ast(&new_node);
@@ -100,4 +101,31 @@ int parse_value(token tok, ast *ast_node) {
 	}
 
 	return 1;
+}
+
+int parse_ident(token tok, ast *ast_node) {
+	if(tok.tok_type != IDENTIFIER) {
+		return -1;
+	}
+
+	if (set_builtin) {
+		ast_node->data.type = BUILTIN;
+	} else {
+		return -1;
+	}
+
+	return 1;
+}
+
+int set_builtin(token tok, ast *ast_node) {
+	// Idea.  Loop through array of string identifiers and function pointers until a match is found.
+	return -1;
+}
+
+ast *func_search(token tok, ast *ast_node) {
+	ast *func_ptr = NULL;
+
+
+
+	return func_ptr;
 }

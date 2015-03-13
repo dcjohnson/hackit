@@ -9,7 +9,8 @@ enum data_type {
 	FLOAT_DATA = 1,
 	LIST_DATA = 2,
 	STRING_DATA = 3,
-	FUNC_DATA = 4
+	FUNC_DATA = 4,
+	BUILTIN = 5
 };
 
 typedef enum data_type data_type;
@@ -27,6 +28,7 @@ union value {
 	char *string_val;
 	struct data_list list;
 	struct ast *func_ptr;
+	void (*builtin)(struct ast *params); // Function pointer for builtin keywords
 };
 
 typedef union value value;
