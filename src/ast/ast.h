@@ -28,7 +28,7 @@ union value {
 	char *string_val;
 	struct data_list list;
 	struct ast *func_ptr;
-	struct ast_data (*builtin)(struct ast *params); // Function pointer for builtin keywords
+	struct ast_data *(*builtin)(struct ast *params, struct ast_data *new_data); // Function pointer for builtin keywords
 };
 
 typedef union value value;

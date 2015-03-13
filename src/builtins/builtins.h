@@ -5,8 +5,9 @@
 #include "../lex/lex.h"
 #include <stdio.h>
 
-typedef ast_data (*core_func_ptr)(ast *params);
+typedef struct ast_data *(*core_func_ptr)(ast *params, struct ast_data *new_data);
 core_func_ptr get_core_ptr(token tok);
-ast_data add(ast *params);
+struct ast_data *add(ast *params, struct ast_data *new_data);
+struct ast_data *print(ast *params, struct ast_data *new_data);
 
 #endif

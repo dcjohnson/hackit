@@ -18,26 +18,8 @@ int main(int argc, char **argv) {
 		{
 			break;
 		}
-		char* err_lex = lex(&toks, input);
-		char* err_parse = parse(&toks, &new_ast);
-		// if(err_lex != NULL)
-		// {
-		// 	printf("%s\n", err_lex);
-		// }
-		// else
-		// {
-		// 	for(int index = 0; index < toks.len; index++)
-		// 	{
-		// 		if(toks.tok_array[index].tok_type != LIST)
-		// 		{
-		// 			printf("%s\n", toks.tok_array[index].tok_data.tok_str);
-		// 		}
-		// 		else
-		// 		{
-		// 			printf("%i\n\n", toks.tok_array[index].tok_data.list_len);
-		// 		}
-		// 	}
-		// }
+		lex(&toks, input);
+		parse(&toks, &new_ast);
 		free_tok_array(&toks);
 	}
 	return 0;
