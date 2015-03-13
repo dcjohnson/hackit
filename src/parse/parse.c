@@ -126,11 +126,3 @@ int set_builtin(token tok, ast *ast_node) {
 		return 1;
 	}
 }
-
-ast *func_search(token tok, ast *ast_node) {
-	ast *func_ptr = NULL;
-
-
-
-	return func_ptr;
-}
