@@ -33,6 +33,7 @@ core_func_ptr get_core_ptr(token tok) {
 		if(strcmp(core[index], tok.tok_data.tok_str) == 0) {
 			return core_ptr[index];
 		}
+		index++;
 	}
 
 	return NULL;

@@ -108,7 +108,7 @@ int parse_ident(token tok, ast *ast_node) {
 		return -1;
 	}
 
-	if (set_builtin == 1) {
+	if (set_builtin(tok, ast_node) == 1) {
 		ast_node->data.type = BUILTIN_FUNC;
 	} else {
 		return -1;
