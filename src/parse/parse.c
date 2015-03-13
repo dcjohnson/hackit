@@ -108,8 +108,8 @@ int parse_ident(token tok, ast *ast_node) {
 		return -1;
 	}
 
-	if (set_builtin) {
-		ast_node->data.type = BUILTIN;
+	if (set_builtin == 1) {
+		ast_node->data.type = BUILTIN_FUNC;
 	} else {
 		return -1;
 	}
@@ -118,8 +118,13 @@ int parse_ident(token tok, ast *ast_node) {
 }
 
 int set_builtin(token tok, ast *ast_node) {
-	// Idea.  Loop through array of string identifiers and function pointers until a match is found.
-	return -1;
+	core_func_ptr func_ptr = get_core_ptr(tok);
+	if (func_ptr == NULL) {
+		return -1;
+	} else {
+		ast_node->data.val.builtin = func_ptr;
+		return 1;
+	}
 }
 
 ast *func_search(token tok, ast *ast_node) {

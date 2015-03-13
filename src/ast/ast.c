@@ -17,8 +17,7 @@ void inc_data_list(data_list *list, ast_data data) {
 	list->list[list->len - 1] = data;
 }
 
-void dec_data_list(data_list *list)
-{
+void dec_data_list(data_list *list) {
 	list->len--;
 	list->list = realloc(list->list, sizeof(ast_data) * list->len);
 }
