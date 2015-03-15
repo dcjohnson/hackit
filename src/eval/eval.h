@@ -19,7 +19,7 @@ struct tree_loc_stack {
 typedef struct tree_loc_stack tree_loc_stack;
 
 void eval(ast *tree);
-tree_loc_stack *push_tree_loc_stack(tree_loc_stack *stack, ast *new_node);
+tree_loc_stack *push_tree_loc_stack(tree_loc_stack *stack, ast *new_node, int child);
 tree_loc_stack *pop_tree_loc_stack(tree_loc_stack *stack);
 
 #endif
