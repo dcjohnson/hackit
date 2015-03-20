@@ -55,5 +55,6 @@ void inc_data_list(data_list *list, ast_data data);
 void dec_data_list(data_list *list);
 void free_ast(ast *ast_head);
 void insert_node(ast *parent, ast new_ast_node);
+void free_ast(ast *tree);
 
 #endif

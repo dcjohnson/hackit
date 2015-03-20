@@ -10,11 +10,18 @@ int main(int argc, char **argv) {
 	token_array toks;
 	ast new_ast;
 	init_ast(&new_ast);
-	printf("%s ", ">>");
-	fgets(input, 1000, stdin);
-	lex(&toks, input);
-	parse(&toks, &new_ast);
-	eval(&new_ast);
-	free_tok_array(&toks);
+	for (;;) {
+		printf("%s ", ">>");
+		fgets(input, 1000, stdin);
+		if (feof(stdin)) {
+			break;
+		}
+		lex(&toks, input);
+		parse(&toks, &new_ast);
+		eval(&new_ast);
+		free_tok_array(&toks);
+		free_ast(&new_ast);
+		init_ast(&new_ast);
+	}
 	return 0;
 }
