@@ -1,7 +1,7 @@
 #include "builtins.h"
 
-const char *core[] = {"+", "add", NULL};
-core_func_ptr core_ptr[] = {add, add};
+const char *core[] = {"add", "print", NULL};
+core_func_ptr core_ptr[] = {add, print};
 
 struct ast_data *add(ast *params, struct ast_data *new_data) {
 	new_data->type = INT_DATA;

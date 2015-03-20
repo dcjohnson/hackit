@@ -72,7 +72,7 @@ char *lex_token(token_array *tokens, char *src, char *cur_char) {
 				((int)static_str[index] >= (int)'A' && (int)static_str[index] <= (int)'Z') ||
 				static_str[index] == '_') {
 		int val_len = lex_ident(tokens, &static_str[index]);
-		add_non_list(tokens, &static_str[index], val_len, VALUE);
+		add_non_list(tokens, &static_str[index], val_len, IDENTIFIER);
 		index += (val_len - 1);
 		if (tok_len > 0) {
 			ok_err_str = ret_err_str(AMBIGUOUS_LIST);
